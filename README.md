@@ -1,27 +1,93 @@
-# NexbiChallenge
+# Nexbi Challenge - Pokémon Trainer App
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.17.
+## 🎯 Descripción del Proyecto
 
-## Development server
+Este es el proyecto base para el desafío técnico de desarrollo frontend. La aplicación permite a un entrenador Pokémon gestionar su colección de criaturas capturadas.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## 📦 Estado Actual
 
-## Code scaffolding
+El proyecto contiene:
+- ✅ Configuración básica de Angular 17
+- ✅ Angular Material configurado
+- ✅ Componente de lista de Pokémon (vista principal)
+- ✅ Modelo de datos básico
+- ✅ Servicio básico para PokeAPI
+- ⚠️ **El código contiene malas prácticas intencionadas que deben ser corregidas**
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## 🚀 Instalación y Ejecución
 
-## Build
+### Prerrequisitos
+- Node.js (v18 o superior)
+- npm (v9 o superior)
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+### Pasos para ejecutar
 
-## Running unit tests
+1. Instalar dependencias:
+```bash
+npm install
+```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+2. Ejecutar el servidor de desarrollo:
+```bash
+npm start
+```
 
-## Running end-to-end tests
+3. Abrir el navegador en: `http://localhost:4200/`
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+## 📝 Tareas del Desafío
 
-## Further help
+Consulta el archivo `CHALLENGE.md` en la carpeta raíz del repositorio para ver las especificaciones completas del desafío técnico.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+### Resumen de tareas principales:
+
+1. **Vista de Detalle** de Pokémon capturado
+2. **Página 404** para rutas inexistentes
+3. **Funcionalidad de Captura** (añadir Pokémon desde PokeAPI)
+4. **Funcionalidad de Edición** de datos de captura
+5. **Funcionalidad de Liberación** (eliminar Pokémon)
+6. **Organización en capas** con arquitectura limpia
+7. **Identificar y corregir malas prácticas** presentes en el código base
+8. **Mejoras opcionales** (localStorage, tests, animaciones, etc.)
+
+## 🏗️ Estructura del Proyecto
+
+```
+src/app/
+├── models/           # Modelo de datos básico
+├── services/         # Servicio básico de API
+├── pokemon-list.component.ts  # Componente principal
+├── app.component.ts
+└── app.config.ts
+```
+
+**Nota**: Esta estructura es inicial. Se espera que reorganices el código aplicando mejores prácticas de arquitectura.
+
+## 🔗 Recursos
+
+- [Documentación de Angular](https://angular.io/docs)
+- [Angular Material](https://material.angular.io/)
+- [PokeAPI Documentation](https://pokeapi.co/docs/v2)
+- [RxJS](https://rxjs.dev/)
+
+## 📊 Criterios de Evaluación
+
+- **Arquitectura y Organización (40%)** - Peso mayor
+- **Funcionalidad (25%)**
+- **Calidad del Código (20%)**
+- **Mejores Prácticas de Angular (10%)**
+- **UI/UX (5%)**
+
+## ⚠️ Importante
+
+Este proyecto base contiene **intencionadamente malas prácticas** que debes identificar, documentar y corregir como parte de la evaluación.
+
+## 🛠️ Comandos Útiles
+
+- `npm start` - Iniciar servidor de desarrollo
+- `npm run build` - Compilar proyecto para producción
+- `npm test` - Ejecutar tests unitarios
+- `ng generate component <nombre>` - Crear nuevo componente
+
+---
+
+**¡Buena suerte con el desafío!** 🍀
