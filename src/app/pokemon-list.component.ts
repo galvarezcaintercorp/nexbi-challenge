@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -33,49 +34,39 @@ import { MatBadgeModule } from '@angular/material/badge';
       </div>
 
       <div class="actions">
-        <button mat-raised-button color="primary">
+        <button mat-raised-button color="primary" (click)="navigateToAdd()">
           <mat-icon>add</mat-icon>
           Capturar Pokémon
         </button>
       </div>
 
       <div class="pokemon-grid">
-        <div *ngFor="let pokemon of capturedPokemons">
-          <mat-card class="pokemon-card">
-            <mat-card-header>
-              <mat-card-title>{{ pokemon.name }}</mat-card-title>
-              <mat-card-subtitle>
-                <span *ngFor="let type of pokemon.types">
-                  {{ type }}
-                </span>
-              </mat-card-subtitle>
-            </mat-card-header>
-            <img mat-card-image [src]="pokemon.image" [alt]="pokemon.name">
-            <mat-card-content>
-              <div class="stats">
-                <div *ngIf="pokemon.hp">
-                  <p>HP: {{ pokemon.hp }}</p>
+        <mat-card *ngFor="let pokemon of capturedPokemons" class="pokemon-card" (click)="viewPokemonDetails(pokemon)">
+          <div class="card-content">
+            <div class="card-left">
+              <div class="card-header">
+                <div class="type-badges">
+                  <span *ngFor="let type of pokemon.types" 
+                        [class]="'type-badge type-' + type.toLowerCase()">
+                    {{ type }}
+                  </span>
                 </div>
-                <div *ngIf="pokemon.attack">
-                  <p>Attack: {{ pokemon.attack }}</p>
-                </div>
-                <div *ngIf="pokemon.defense">
-                  <p>Defense: {{ pokemon.defense }}</p>
-                </div>
+                <div class="pokemon-number">#{{ pokemon.pokemonId.toString().padStart(3, '0') }}</div>
               </div>
+              <h2 class="pokemon-name">{{ pokemon.name }}</h2>
               <div class="capture-info">
-                <p>Level: {{ pokemon.level }}</p>
-                <p>Captured: {{ pokemon.captureDate }}</p>
-                <p>Location: {{ pokemon.captureLocation }}</p>
+                <p><strong>Capturado:</strong> {{ formatDate(pokemon.captureDate) }}</p>
+                <p *ngIf="pokemon.captureLocation"><strong>Lugar:</strong> {{ pokemon.captureLocation }}</p>
+                <p *ngIf="pokemon.pokeballType"><strong>Pokéball:</strong> {{ pokemon.pokeballType }}</p>
+                <p *ngIf="pokemon.level"><strong>Nivel:</strong> {{ pokemon.level }}</p>
+                <p *ngIf="pokemon.nickname" class="nickname"><strong>Apodo:</strong> {{ pokemon.nickname }}</p>
               </div>
-            </mat-card-content>
-            <mat-card-actions>
-              <button mat-button color="primary">Ver Detalles</button>
-              <button mat-button color="accent">Editar</button>
-              <button mat-button color="warn">Liberar</button>
-            </mat-card-actions>
-          </mat-card>
-        </div>
+            </div>
+            <div class="card-right">
+              <img [src]="pokemon.image" [alt]="pokemon.name">
+            </div>
+          </div>
+        </mat-card>
       </div>
 
       <div *ngIf="capturedPokemons.length === 0" class="empty-state">
@@ -90,6 +81,8 @@ import { MatBadgeModule } from '@angular/material/badge';
       padding: 20px;
       max-width: 1200px;
       margin: 0 auto;
+      position: relative;
+      z-index: 1;
     }
 
     .header {
@@ -113,34 +106,119 @@ import { MatBadgeModule } from '@angular/material/badge';
 
     .pokemon-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
       gap: 20px;
       margin-bottom: 20px;
     }
 
     .pokemon-card {
-      height: 100%;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      border-radius: 12px;
+      overflow: hidden;
     }
 
-    .pokemon-card img {
-      height: 200px;
-      object-fit: contain;
+    .pokemon-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
     }
 
-    .stats {
+    .card-content {
       display: flex;
-      gap: 15px;
-      margin-bottom: 10px;
+      padding: 20px;
+      gap: 20px;
+      min-height: 180px;
     }
 
-    .stats div {
+    .card-left {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+
+    .type-badges {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .type-badge {
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: capitalize;
+      color: white;
+    }
+
+    .type-grass { background: #9BCC50; }
+    .type-poison { background: #B97FC9; }
+    .type-fire { background: #FD7D24; }
+    .type-water { background: #4592C4; }
+    .type-electric { background: #EED535; color: #333; }
+    .type-normal { background: #A4ACAF; }
+    .type-fighting { background: #D56723; }
+    .type-flying { background: #3DC7EF; }
+    .type-ground { background: #AB9842; }
+    .type-rock { background: #A38C21; }
+    .type-bug { background: #729F3F; }
+    .type-ghost { background: #7B62A3; }
+    .type-steel { background: #9EB7B8; }
+    .type-psychic { background: #F366B9; }
+    .type-ice { background: #51C4E7; }
+    .type-dragon { background: #53A4CF; }
+    .type-dark { background: #707070; }
+    .type-fairy { background: #FDB9E9; color: #333; }
+
+    .pokemon-number {
+      font-size: 16px;
+      font-weight: 700;
+      color: #666;
+    }
+
+    .pokemon-name {
+      font-size: 28px;
+      font-weight: 700;
+      color: #333;
+      margin: 0 0 12px 0;
+      text-transform: capitalize;
+    }
+
+    .capture-info {
       flex: 1;
     }
 
     .capture-info p {
-      margin: 5px 0;
-      font-size: 14px;
+      margin: 6px 0;
+      font-size: 13px;
       color: #666;
+      line-height: 1.5;
+    }
+
+    .capture-info .nickname {
+      color: #2196F3;
+      font-style: italic;
+    }
+
+    .card-right {
+      width: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card-right img {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      image-rendering: pixelated;
     }
 
     .empty-state {
@@ -155,32 +233,54 @@ import { MatBadgeModule } from '@angular/material/badge';
       height: 80px;
       color: #ccc;
     }
-
-    mat-card-subtitle span {
-      display: inline-block;
-      margin-right: 8px;
-      padding: 2px 8px;
-      background: #e0e0e0;
-      border-radius: 12px;
-      font-size: 12px;
-    }
   `]
 })
 export class PokemonListComponent {
   trainerName: any = 'Ash Ketchum';
   capturedPokemons: any = [];
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     // Lógica mezclada en el componente
     this.loadTrainerData();
+    this.loadCapturedPokemons();
   }
 
   loadTrainerData() {
     // Simulación de carga de datos
     // En el código real, aquí habría llamadas HTTP directas
-    this.capturedPokemons = [];
+  }
+
+  loadCapturedPokemons() {
+    // Acceso directo a localStorage en componente - mala práctica
+    const stored = localStorage.getItem('capturedPokemons');
+    if (stored) {
+      this.capturedPokemons = JSON.parse(stored);
+    } else {
+      this.capturedPokemons = [];
+    }
+  }
+
+  navigateToAdd() {
+    this.router.navigate(['/add']);
+  }
+
+  viewPokemonDetails(pokemon: any) {
+    // Mala práctica: Sin implementación real
+    console.log('Ver detalles de', pokemon.name);
+    // Aquí debería navegar a una vista de detalles
+  }
+
+  formatDate(date: any) {
+    // Lógica de formateo en componente - mala práctica
+    if (date instanceof Date) {
+      return date.toLocaleDateString();
+    }
+    return new Date(date).toLocaleDateString();
   }
 
   capturePokemon(pokemon: any) {

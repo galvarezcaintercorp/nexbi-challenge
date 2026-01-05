@@ -6,10 +6,37 @@ html, body {
 
 body { 
   margin: 0; 
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-  background-color: #f5f5f5;
+  font-family: 'Segoe UI', Roboto, "Helvetica Neue", sans-serif;
+  background: linear-gradient(135deg, #e8e8e8 0%, #d5d5d5 100%);
+  position: relative;
+  overflow-x: hidden;
 }
 
 * {
   box-sizing: border-box;
+}
+
+/* Pokeball decorations */
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 40px solid rgba(255, 255, 255, 0.15);
+  z-index: 0;
+}
+
+body::before {
+  width: 400px;
+  height: 400px;
+  top: -200px;
+  left: -200px;
+}
+
+body::after {
+  width: 600px;
+  height: 600px;
+  bottom: -300px;
+  right: -300px;
 }
